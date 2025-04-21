@@ -11,60 +11,87 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as NavigationLayoutImport } from './routes/NavigationLayout'
 import { Route as homeHomeImport } from './routes/home/home'
 
 // Create/Update Routes
 
+const NavigationLayoutRoute = NavigationLayoutImport.update({
+  id: '/_NavigationLayout',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const homeHomeRoute = homeHomeImport.update({
   id: '/test',
   path: '/test',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => NavigationLayoutRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/test': {
-      id: '/test'
+    '/_NavigationLayout': {
+      id: '/_NavigationLayout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof NavigationLayoutImport
+      parentRoute: typeof rootRoute
+    }
+    '/_NavigationLayout/test': {
+      id: '/_NavigationLayout/test'
       path: '/test'
       fullPath: '/test'
       preLoaderRoute: typeof homeHomeImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof NavigationLayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface NavigationLayoutRouteChildren {
+  homeHomeRoute: typeof homeHomeRoute
+}
+
+const NavigationLayoutRouteChildren: NavigationLayoutRouteChildren = {
+  homeHomeRoute: homeHomeRoute,
+}
+
+const NavigationLayoutRouteWithChildren =
+  NavigationLayoutRoute._addFileChildren(NavigationLayoutRouteChildren)
+
 export interface FileRoutesByFullPath {
+  '': typeof NavigationLayoutRouteWithChildren
   '/test': typeof homeHomeRoute
 }
 
 export interface FileRoutesByTo {
+  '': typeof NavigationLayoutRouteWithChildren
   '/test': typeof homeHomeRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/test': typeof homeHomeRoute
+  '/_NavigationLayout': typeof NavigationLayoutRouteWithChildren
+  '/_NavigationLayout/test': typeof homeHomeRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/test'
+  fullPaths: '' | '/test'
   fileRoutesByTo: FileRoutesByTo
-  to: '/test'
-  id: '__root__' | '/test'
+  to: '' | '/test'
+  id: '__root__' | '/_NavigationLayout' | '/_NavigationLayout/test'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  homeHomeRoute: typeof homeHomeRoute
+  NavigationLayoutRoute: typeof NavigationLayoutRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  homeHomeRoute: homeHomeRoute,
+  NavigationLayoutRoute: NavigationLayoutRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +104,18 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/test"
+        "/_NavigationLayout"
       ]
     },
-    "/test": {
-      "filePath": "home/home.tsx"
+    "/_NavigationLayout": {
+      "filePath": "NavigationLayout.tsx",
+      "children": [
+        "/_NavigationLayout/test"
+      ]
+    },
+    "/_NavigationLayout/test": {
+      "filePath": "home/home.tsx",
+      "parent": "/_NavigationLayout"
     }
   }
 }

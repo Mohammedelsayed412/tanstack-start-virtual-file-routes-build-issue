@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 import tsConfigPaths from "vite-tsconfig-paths";
 
 // Optional: Import your virtual route config if needed
-import { routes } from "./src/routes/routes";
+import { routes } from "./src/routes";
 
 export default defineConfig({
   tsr: {
