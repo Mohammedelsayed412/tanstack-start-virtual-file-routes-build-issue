@@ -5,9 +5,7 @@ import {
 } from "@tanstack/react-router";
 import { aboutServerFn } from "./actions";
 export const Route = createFileRoute("/_NavigationLayout/about")({
-  component: lazyRouteComponent(() =>
-    import("./about.lazy").then((mod) => mod.RouteComponent)
-  ),
+  component: lazyRouteComponent(() => import("./about.lazy")),
   loader: async () => {
     await aboutServerFn();
     return {
