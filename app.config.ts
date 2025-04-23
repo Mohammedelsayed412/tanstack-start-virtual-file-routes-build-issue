@@ -1,5 +1,4 @@
 import { defineConfig } from "@tanstack/react-start/config";
-import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
 import tsConfigPaths from "vite-tsconfig-paths";
 
@@ -9,6 +8,8 @@ import { routes } from "./src/routes";
 export default defineConfig({
   tsr: {
     appDirectory: "src",
+    virtualRouteConfig: routes,
+    routesDirectory: "./src/routes",
   },
   vite: {
     plugins: [
@@ -16,10 +17,6 @@ export default defineConfig({
         projects: ["./tsconfig.json"],
       }),
       // tailwindcss(),
-      TanStackRouterVite({
-        virtualRouteConfig: routes,
-        routesDirectory: "./src/routes",
-      }),
     ],
     // css: {
     // 	preprocessorOptions: {
