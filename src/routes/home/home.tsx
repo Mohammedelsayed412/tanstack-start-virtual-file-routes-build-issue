@@ -1,16 +1,16 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { testAction } from './actions/actions';
+import { createFileRoute } from "@tanstack/react-router";
+import { homeServerFn } from "./actions";
 
-export const Route = createFileRoute('/_NavigationLayout/')({
+export const Route = createFileRoute("/_NavigationLayout/")({
   component: RouteComponent,
   loader: async () => {
-    await testAction();
+    await homeServerFn();
     return {
-      message: "Hello World",
+      message: "Hello from home loader",
     };
   },
 });
 
 function RouteComponent() {
-  return <div className="text-blue-500 text-xl">Hello "/home"!</div>
+  return <div className="text-blue-500 text-xl">Hello "/home"!</div>;
 }
