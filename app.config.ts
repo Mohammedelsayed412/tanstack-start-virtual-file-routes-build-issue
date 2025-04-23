@@ -10,6 +10,7 @@ export default defineConfig({
     appDirectory: "src",
     virtualRouteConfig: routes,
     routesDirectory: "./src/routes",
+    autoCodeSplitting: true,
   },
   vite: {
     plugins: [
